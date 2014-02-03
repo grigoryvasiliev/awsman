@@ -11,7 +11,4 @@ now = datetime.datetime.now()
 for i in all:
     #time = datetime.datetime(*time.strptime(i.launch_time, "%Y-%m-%dT%H:%M:%S")[:6])
     print " %s %s %s %s %s" % (i.id, i.state, i.launch_time, i.instance_type, i.spot_instance_request_id)
-# attr = sys.argv[3]
-# name = sys.argv[4]
-# terminate_instance_by_attr(connection_, attr, name)
 print "work has completed"
