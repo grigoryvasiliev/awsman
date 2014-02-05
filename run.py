@@ -9,7 +9,11 @@ all = [r.instances[0] for r in c.get_all_instances()]
 import datetime
 now = datetime.datetime.now()
 print "Total count: %i" % len(all) 
+
+from dateutil import parser
+from datetime import timedelta
+
 for i in all:
-    #time = datetime.datetime(*time.strptime(i.launch_time, "%Y-%m-%dT%H:%M:%S")[:6])
-    print " %s %s %s %s %s %s" % (i.id, i.state, i.launch_time, i.instance_type, i.spot_instance_request_id, i.tags['Name'] )
+    t = parser.parse(i.launch_time).replace(tzinfo=None)
+    print "%.1fh \t %s \t\t %s\t %s\t %s\t %s\t %s\t %s" % ( (now - t).total_seconds() / 3600, i.tags['Name'], i.id, i.state, i.launch_time, i.instance_type, i.spot_instance_request_id, i.platform )
 print "work has completed"
