@@ -13,7 +13,19 @@ print "Total count: %i" % len(all)
 from dateutil import parser
 from datetime import timedelta
 
-for i in all:
+print 'All instances'
+
+def loginst( i ):
     t = parser.parse(i.launch_time).replace(tzinfo=None)
-    print "%.1fh \t %s \t\t %s\t %s\t %s\t %s\t %s\t %s" % ( (now - t).total_seconds() / 3600, i.tags['Name'], i.id, i.state, i.launch_time, i.instance_type, i.spot_instance_request_id, i.platform )
+    print "%.1fh \t %s \t %s\t %s\t %s\t %s\t %s\t %s" % ( (now - t).total_seconds() / 3600, i.tags['Name'], i.id, i.state, i.launch_time, i.instance_type, i.spot_instance_request_id, i.platform )
+
+for i in all:
+    loginst( i )
+        
+print 'Instances for termination'
+        
+for i in all:
+    if i.state == 'running' and i.platform == 'windows' and i.instance_type not in ['t1.micro','m1.small', 'm1.medium']:
+        loginst( i )
+        i.terminate()
 print "work has completed"
