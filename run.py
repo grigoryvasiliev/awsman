@@ -17,7 +17,9 @@ print 'All instances'
 
 def loginst( i ):
     t = parser.parse(i.launch_time).replace(tzinfo=None)
-    print "%.1fh \t %s \t %s\t %s\t %s\t %s\t %s\t %s" % ( (now - t).total_seconds() / 3600, i.tags['Name'], i.id, i.state, i.launch_time, i.instance_type, i.spot_instance_request_id, i.platform )
+    n = ''
+    if i.tags.has_key('Name'): n = i.tags['Name']
+    print "%.1fh \t %s \t %s\t %s\t %s\t %s\t %s\t %s" % ( (now - t).total_seconds() / 3600, n, i.id, i.state, i.launch_time, i.instance_type, i.spot_instance_request_id, i.platform )
 
 for i in all:
     loginst( i )
@@ -25,7 +27,7 @@ for i in all:
 print 'Instances for termination'
         
 for i in all:
-    if i.state == 'running' and i.platform == 'windows' and i.instance_type not in ['t1.micro','m1.small', 'm1.medium']:
+    if i.state == 'running' and ( i.instance_type not in ['t1.micro','m1.small'] or i.platform == 'windows' ):
         loginst( i )
         i.terminate()
 print "work has completed"
