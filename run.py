@@ -21,16 +21,19 @@ def loginst( i ):
     if i.tags.has_key('Name'): n = i.tags['Name']
     if i.tags.has_key('team'): team = i.tags['team']
     if i.tags.has_key('protection'): p = i.tags['protection']
-    print "%.1fh,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" % ( (now - t).total_seconds() / 3600,(now - t).total_seconds(), n, team, i.id, i.state, i.instance_type, i.spot_instance_request_id, i.platform, p, i.root_device_name, i.root_device_type )
+    print "%s, \t%.1fh,%s,%s,%s,%s,%s,%s,%s,%s,%s" % (n,  (now - t).total_seconds() / 3600,team, i.id, i.state, i.instance_type, i.spot_instance_request_id, i.platform, p, i.root_device_name, i.root_device_type )
 
 # for i in all:
     # loginst( i )
         
 print 'Instances for termination at night hours'
-        
+
+count = 0
+
 for i in all:
-    if not i.tags.has_key('protection') and i.state == 'running' and ( i.instance_type not in ['t1.micro','m1.small'] or i.platform == 'windows' ):
+    if (not i.tags.has_key('protection') or i.tags['protection'].strip() != '1' ) and ( i.instance_type not in ['t1.micro','m1.small'] or i.platform == 'windows' ):
         loginst( i )
+        count += 1
         i.terminate() 
 
-print "work has completed"
+print "work has completed for %d instances" % count
