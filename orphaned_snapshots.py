@@ -63,15 +63,15 @@ for snapshot in ec2Connection.get_all_snapshots(owner='self'):
         else:
             imageSnapshots[snapshotImageId] = [snapshotId]
 
-# print "Mapped snapshots:"
-# for image in sorted(imageSnapshots.keys()):
-    # print image + ": " + imageNames[image]
-    # for snapshot in imageSnapshots[image]:
-        # print "\t- " + snapshot
+print "Mapped snapshots:"
+for image in sorted(imageSnapshots.keys()):
+    print image + ": " + imageNames[image]
+    for snapshot in imageSnapshots[image]:
+        print "\t- " + snapshot
 
-# print
-# print "Orphans: " + ','.join(sorted(snapshotsToDelete))
-# print
-# print "Unknown: " + ','.join(sorted(snapshotsUnknown))
+print
+print "Orphans: " + ','.join(sorted(snapshotsToDelete))
+print
+print "Unknown: " + ','.join(sorted(snapshotsUnknown))
 # Close connection to EC2.
 ec2Connection.close()
