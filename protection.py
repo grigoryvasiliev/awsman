@@ -31,7 +31,7 @@ print 'Instances for termination at night hours'
 count = 0
 
 for i in all:
-    if (not i.tags.has_key('protection') or i.tags['protection'].strip() != '1' ) and ( i.instance_type not in ['t1.micro','m1.small'] or i.platform == 'windows' ):
+    if (not i.tags.has_key('protection') or i.tags['protection'].strip() != '1' ) and ( i.instance_type not in ['t1.micro','m1.small'] or i.platform == 'windows' ) and not ( i.tags.has_key('ttl') and i.tags['ttl'].strip().isdigit() ):
         loginst( i )
         count += 1
         i.terminate() 
