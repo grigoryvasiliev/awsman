@@ -27,6 +27,6 @@ for i in all:
     t = (now - parser.parse(i.launch_time).replace(tzinfo=None)).total_seconds()
     if i.tags.has_key('ttl') and i.tags['ttl'].strip().isdigit() and t > int( i.tags['ttl'].strip() ) * 3600 + 1800:
         loginst( i )
-        # i.terminate()
+        i.terminate()
 
 print "work has completed"
