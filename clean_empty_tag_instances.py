@@ -25,7 +25,7 @@ print 'Instances for termination with no team tag'
 print "Lifetime(h),Lifetime(sec),Name,team,id,state,instance_type,spot_request_id,platform,protection"
 for i in all:
     t = (now - parser.parse(i.launch_time).replace(tzinfo=None)).total_seconds()
-    if ( not i.tags.has_key('team') or i.tags['team'] not in ['dmp','mmex','rmad','rmex', 'sasp', 'ecolabs', 'rmsp','unicorn','logman','odme'] ) and t > 1800:
+    if ( not i.tags.has_key('team') or i.tags['team'] not in ['dmp','mmex','rmad','rmex', 'sasp', 'ecolabs', 'rmsp','unicorn','logman','odme','mmp'] ) and t > 1800:
         loginst( i )
         i.terminate()
 
