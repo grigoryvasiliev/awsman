@@ -23,17 +23,33 @@ def loginst( i ):
     if i.tags.has_key('protection'): p = i.tags['protection']
     print "%s, \t%.1fh,%s,%s,%s,%s,%s,%s,%s,%s,%s" % (n,  (now - t).total_seconds() / 3600,team, i.id, i.state, i.instance_type, i.spot_instance_request_id, i.platform, p, i.root_device_name, i.root_device_type )
 
+def any_tags( all ):
+    print 'Try to find instance with any tags...'
+    for i in all:
+        if ( len( i.tags ) ):
+            print 'Found this one:'
+            print i.tags
+            loginst( i )
+            return True
+        loginst( i )
+    print 'No tags found'
+    return False
+    
+    
 # for i in all:
     # loginst( i )
-        
-print 'Instances for termination at night hours'
 
-count = 0
+if any_tags( all ):    
+    print 'Instances for termination at night hours'
 
-for i in all:
-    if (not i.tags.has_key('protection') or i.tags['protection'].strip() != '1' ) and ( i.instance_type not in ['t1.micro','m1.small'] or i.platform == 'windows' ) and not ( i.tags.has_key('ttl') and i.tags['ttl'].strip().isdigit() ):
-        loginst( i )
-        count += 1
-        i.terminate() 
+    count = 0
 
-print "work has completed for %d instances" % count
+    for i in all:
+        if (not i.tags.has_key('protection') or i.tags['protection'].strip() != '1' ) and ( i.instance_type not in ['t1.micro','m1.small'] or i.platform == 'windows' ) and not ( i.tags.has_key('ttl') and i.tags['ttl'].strip().isdigit() ):
+            loginst( i )
+            count += 1
+            i.terminate() 
+
+    print "work has completed for %d instances" % count
+else:
+    print 'INTERRUPT: No tags found'
