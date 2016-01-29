@@ -21,12 +21,29 @@ def loginst( i ):
     if i.tags.has_key('protection'): p = i.tags['protection']
     print "%.1fh,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" % ( (now - t).total_seconds() / 3600,(now - t).total_seconds(), n, team, i.id, i.state, i.instance_type, i.spot_instance_request_id, i.platform, p, i.root_device_name, i.root_device_type )
 
-print 'Instances for termination with no team tag'
-print "Lifetime(h),Lifetime(sec),Name,team,id,state,instance_type,spot_request_id,platform,protection"
-for i in all:
-    t = (now - parser.parse(i.launch_time).replace(tzinfo=None)).total_seconds()
-    if ( not i.tags.has_key('team') or i.tags['team'] not in ['dmp','mmex','rmad','rmex', 'sasp', 'ecolabs', 'rmsp','unicorn','logman','odme','mmp','mmm'] ) and t > 1800:
+def any_tags( all ):
+    print 'Try to find instance with any tags...'
+    for i in all:
+        if ( len( i.tags ) ):
+            print 'Found this one:'
+            print i.tags
+            loginst( i )
+            return True
         loginst( i )
-        i.terminate()
+    print 'No tags found'
+    return False
 
-print "work has completed"
+if any_tags( all ):
+    print 'Instances for termination with no team tag'
+    print "Lifetime(h),Lifetime(sec),Name,team,id,state,instance_type,spot_request_id,platform,protection"
+    for i in all:
+        t = (now - parser.parse(i.launch_time).replace(tzinfo=None)).total_seconds()
+        if ( not i.tags.has_key('team') or i.tags['team'] not in ['dmp','mmex','rmad','rmex', 'sasp', 'ecolabs', 'rmsp','unicorn','logman','odme','mmp','mmm'] ) and t > 1800:
+            loginst( i )
+            i.terminate()
+
+    print "work has completed"
+else:
+    print 'INTERRUPT: No tags found'
+
+    
